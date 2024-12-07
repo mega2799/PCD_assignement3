@@ -4,45 +4,53 @@
 
 La soluzione ad attori del problema degli Assignement precedenti è stata implementata in java, utilizzando la libreria Akka.
 
-### Struttura del Sistema ad Attori e Descrizione Operativa
+\section*{Struttura del Sistema ad Attori e Descrizione Operativa}
 
-La gerarchia è composta da tre principali livelli di attori: **Boss**, **Pm** e **Employee**, ciascuno con ruoli e responsabilità ben definiti.  
+La gerarchia è composta da tre principali livelli di attori: \textbf{Boss}, \textbf{Pm} e \textbf{Employee}, ciascuno con ruoli e responsabilità ben definiti.
 
-#### Livello 1: Boss  
-L'attore **Boss** è la radice della gerarchia ed è responsabile dell'intero processo di gestione dei task. Riceve il percorso di una directory (`directoryPath`) e popola una lista di compiti (`pathList`) utilizzando la funzione `Utils.populateListOfPaths`. Dopo aver suddiviso i compiti in sottogruppi basandosi sul numero di lavoratori disponibili, il **Boss** invia un messaggio `Pm.Order` al suo subordinato **Pm**, specificando:
-- La directory di lavoro.
-- I compiti da eseguire suddivisi in blocchi.
-- Eventuali riferimenti per risposte future.  
+\subsection*{Livello 1: Boss}
+L'attore \textbf{Boss} è la radice della gerarchia ed è responsabile dell'intero processo di gestione dei task. Riceve il percorso di una directory (\texttt{directoryPath}) e popola una lista di compiti (\texttt{pathList}) utilizzando la funzione \texttt{Utils.populateListOfPaths}. Dopo aver suddiviso i compiti in sottogruppi basandosi sul numero di lavoratori disponibili, il \textbf{Boss} invia un messaggio \texttt{Pm.Order} al suo subordinato \textbf{Pm}, specificando:
+\begin{itemize}
+    \item La directory di lavoro.
+    \item I compiti da eseguire suddivisi in blocchi.
+    \item Eventuali riferimenti per risposte future.
+\end{itemize}
 
-Inoltre, il **Boss** monitora l'elaborazione tramite i report inviati dagli **Employee**, aggiornando i dati attraverso un’interfaccia che organizza i risultati dei task. Questo lo rende il punto centrale della raccolta dei risultati.
+Inoltre, il \textbf{Boss} monitora l'elaborazione tramite i report inviati dagli \textbf{Employee}, aggiornando i dati attraverso un’interfaccia che organizza i risultati dei task. Questo lo rende il punto centrale della raccolta dei risultati.
 
-#### Livello 2: Pm (Project Manager)  
-Il **Pm** agisce come intermediario tra il **Boss** e i lavoratori effettivi (**Employee**). Al momento della creazione, genera una serie di attori **Employee**, il cui numero è specificato dalla costante `NUMBER_OF_WORKERS`. Il **Pm** riceve i compiti dal **Boss** e li assegna ai suoi lavoratori utilizzando il messaggio `Ordered`, suddividendo equamente i task.  
-Durante l'elaborazione, il **Pm** riceve i report dagli **Employee** tramite messaggi di tipo `Employee.Report` e li inoltra al **Boss**.  
-In caso di comandi globali come la pausa (`StopMsg`) o la ripresa (`ResumeMsg`), il **Pm** inoltra i messaggi a tutti gli **Employee**, garantendo un controllo centralizzato.
+\subsection*{Livello 2: Pm (Project Manager)}
+Il \textbf{Pm} agisce come intermediario tra il \textbf{Boss} e i lavoratori effettivi (\textbf{Employee}). Al momento della creazione, genera una serie di attori \textbf{Employee}, il cui numero è specificato dalla costante \texttt{NUMBER\_OF\_WORKERS}. Il \textbf{Pm} riceve i compiti dal \textbf{Boss} e li assegna ai suoi lavoratori utilizzando il messaggio \texttt{Ordered}, suddividendo equamente i task.  
 
-#### Livello 3: Employee  
-Gli attori **Employee** rappresentano i lavoratori del sistema. Ognuno riceve un insieme di compiti dal **Pm** e li elabora uno alla volta. Le principali caratteristiche di un **Employee** includono:
-- **Gestione Asincrona dei Task:** I task vengono elaborati utilizzando una funzione di utilità (`Utils.linesWithBufferInputStream`) e i risultati vengono inviati tramite un report al mittente (di norma il **Pm**).
-- **Pausa e Ripresa:** Gli **Employee** possono fermare l'elaborazione dei task tramite il messaggio `StopMsg` e riprenderla tramite `ResumeMsg`. Questa capacità migliora la resilienza del sistema e consente una gestione flessibile dei lavoratori.
-- **Chiusura Ciclica dei Task:** Utilizzano un iteratore (`taskIterator`) per avanzare nel ciclo di compiti assegnati e inviano notifiche al completamento.
+Durante l'elaborazione, il \textbf{Pm} riceve i report dagli \textbf{Employee} tramite messaggi di tipo \texttt{Employee.Report} e li inoltra al \textbf{Boss}.  
 
-#### Interazione tra gli Attori  
+In caso di comandi globali come la pausa (\texttt{StopMsg}) o la ripresa (\texttt{ResumeMsg}), il \textbf{Pm} inoltra i messaggi a tutti gli \textbf{Employee}, garantendo un controllo centralizzato.
+
+\subsection*{Livello 3: Employee}
+Gli attori \textbf{Employee} rappresentano i lavoratori del sistema. Ognuno riceve un insieme di compiti dal \textbf{Pm} e li elabora uno alla volta. Le principali caratteristiche di un \textbf{Employee} includono:
+\begin{itemize}
+    \item \textbf{Gestione Asincrona dei Task:} I task vengono elaborati utilizzando una funzione di utilità (\texttt{Utils.linesWithBufferInputStream}) e i risultati vengono inviati tramite un report al mittente (di norma il \textbf{Pm}).
+    \item \textbf{Pausa e Ripresa:} Gli \textbf{Employee} possono fermare l'elaborazione dei task tramite il messaggio \texttt{StopMsg} e riprenderla tramite \texttt{ResumeMsg}. Questa capacità migliora la resilienza del sistema e consente una gestione flessibile dei lavoratori.
+    \item \textbf{Chiusura Ciclica dei Task:} Utilizzano un iteratore (\texttt{taskIterator}) per avanzare nel ciclo di compiti assegnati e inviano notifiche al completamento.
+\end{itemize}
+
+\subsection*{Interazione tra gli Attori}
 L'interazione tra gli attori è basata su un flusso di messaggi ben definito:
-1. **Boss → Pm:** Invio dei compiti tramite `Pm.Order`.
-2. **Pm → Employee:** Assegnazione dei task tramite `Ordered`.
-3. **Employee → Pm:** Invio dei risultati dei task tramite `Employee.Report`.
-4. **Pm → Boss:** Trasmissione dei report degli **Employee**.
+\begin{enumerate}
+    \item \textbf{Boss → Pm:} Invio dei compiti tramite \texttt{Pm.Order}.
+    \item \textbf{Pm → Employee:} Assegnazione dei task tramite \texttt{Ordered}.
+    \item \textbf{Employee → Pm:} Invio dei risultati dei task tramite \texttt{Employee.Report}.
+    \item \textbf{Pm → Boss:} Trasmissione dei report degli \textbf{Employee}.
+\end{enumerate}
 
 Questa struttura modulare rende il sistema scalabile e facile da mantenere, poiché ogni livello si occupa esclusivamente di un insieme ben definito di responsabilità.
 
-#### Vantaggi del Design
-1. **Modularità:** Ogni attore ha ruoli chiari, facilitando estensioni o modifiche.
-2. **Parallelismo:** L'uso degli attori consente un'elaborazione parallela dei task.
-3. **Resilienza:** La gestione di eventi come pause e riprese garantisce continuità operativa.
-4. **Scalabilità:** È possibile aggiungere più attori **Pm** o **Employee** per gestire un numero maggiore di compiti senza modificare l'architettura principale.
-
-Se desideri, posso creare una sezione per includere potenziali miglioramenti o una visualizzazione grafica della gerarchia e delle comunicazioni. Fammi sapere!
+\subsection*{Vantaggi del Design}
+\begin{enumerate}
+    \item \textbf{Modularità:} Ogni attore ha ruoli chiari, facilitando estensioni o modifiche.
+    \item \textbf{Parallelismo:} L'uso degli attori consente un'elaborazione parallela dei task.
+    \item \textbf{Resilienza:} La gestione di eventi come pause e riprese garantisce continuità operativa.
+    \item \textbf{Scalabilità:} È possibile aggiungere più attori \textbf{Pm} o \textbf{Employee} per gestire un numero maggiore di compiti senza modificare l'architettura principale.
+\end{enumerate}
 
 
 \includegraphics[width=3cm]{/report/imng/chaGpt-graph.png}\\[0.5cm]
