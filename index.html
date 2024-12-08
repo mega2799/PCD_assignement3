@@ -29,7 +29,25 @@
 <ul>
 <li><a href="#list-of-abbreviations" id="toc-list-of-abbreviations">List
 of Abbreviations</a></li>
-<li><a href="#ch:into" id="toc-ch:into">Part 1</a></li>
+<li><a href="#ch:into" id="toc-ch:into">Parte 1</a>
+<ul>
+<li><a href="#struttura-del-sistema-ad-attori-e-descrizione-operativa"
+id="toc-struttura-del-sistema-ad-attori-e-descrizione-operativa">Struttura
+del Sistema ad Attori e Descrizione Operativa</a>
+<ul>
+<li><a href="#livello-1-boss" id="toc-livello-1-boss">Livello 1:
+Boss</a></li>
+<li><a href="#livello-2-pm-project-manager"
+id="toc-livello-2-pm-project-manager">Livello 2: Pm (Project
+Manager)</a></li>
+<li><a href="#livello-3-employee" id="toc-livello-3-employee">Livello 3:
+Employee</a></li>
+<li><a href="#interazione-tra-gli-attori"
+id="toc-interazione-tra-gli-attori">Interazione tra gli Attori</a></li>
+<li><a href="#vantaggi-del-design" id="toc-vantaggi-del-design">Vantaggi
+del Design</a></li>
+</ul></li>
+</ul></li>
 <li><a href="#ch:into" id="toc-ch:into">Part 2</a></li>
 <li><a href="#ch:into" id="toc-ch:into">Part 3</a></li>
 </ul>
@@ -45,15 +63,152 @@ DISI</span><br />
 <span> Matteo Santoro </span><br />
 <span> <em>Supervisor:</em> Alessandro Ricci </span><br />
 </p>
-<p>2024-12-04</p>
+<p>2024-12-08</p>
 </div>
 </div>
 <h2 id="list-of-abbreviations">List of Abbreviations</h2>
 <div class="abbrv">
 <p>School of Mathematical, Physical and Computational Sciences</p>
 </div>
-<h1 id="ch:into">Part 1</h1>
+<h1 id="ch:into">Parte 1</h1>
+<p>La soluzione ad attori del problema degli Assignement precedenti è
+stata implementata in java, utilizzando la libreria Akka.</p>
+<h2 class="unnumbered"
+id="struttura-del-sistema-ad-attori-e-descrizione-operativa">Struttura
+del Sistema ad Attori e Descrizione Operativa</h2>
+<p>La gerarchia è composta da tre principali livelli di attori:
+<strong>Boss</strong>, <strong>Pm</strong> e <strong>Employee</strong>,
+ciascuno con ruoli e responsabilità ben definiti.</p>
+<h3 class="unnumbered" id="livello-1-boss">Livello 1: Boss</h3>
+<p>L’attore <strong>Boss</strong> è la radice della gerarchia ed è
+responsabile dell’intero processo di gestione dei task. Riceve il
+percorso di una directory (<code>directoryPath</code>) e popola una
+lista di compiti (<code>pathList</code>) utilizzando la funzione
+<code>Utils.populateListOfPaths</code>. Dopo aver suddiviso i compiti in
+sottogruppi basandosi sul numero di lavoratori disponibili, il
+<strong>Boss</strong> invia un messaggio <code>Pm.Order</code> al suo
+subordinato <strong>Pm</strong>, specificando:</p>
+<ul>
+<li><p>La directory di lavoro.</p></li>
+<li><p>I compiti da eseguire suddivisi in blocchi.</p></li>
+<li><p>Eventuali riferimenti per risposte future.</p></li>
+</ul>
+<p>Inoltre, il <strong>Boss</strong> monitora l’elaborazione tramite i
+report inviati dagli <strong>Employee</strong>, aggiornando i dati
+attraverso un’interfaccia che organizza i risultati dei task. Questo lo
+rende il punto centrale della raccolta dei risultati.</p>
+<h3 class="unnumbered" id="livello-2-pm-project-manager">Livello 2: Pm
+(Project Manager)</h3>
+<p>Il <strong>Pm</strong> agisce come intermediario tra il
+<strong>Boss</strong> e i lavoratori effettivi
+(<strong>Employee</strong>). Al momento della creazione, genera una
+serie di attori <strong>Employee</strong>, il cui numero è specificato
+dalla costante <code>NUMBER_OF_WORKERS</code>. Il <strong>Pm</strong>
+riceve i compiti dal <strong>Boss</strong> e li assegna ai suoi
+lavoratori utilizzando il messaggio <code>Ordered</code>, suddividendo
+equamente i task.</p>
+<p>Durante l’elaborazione, il <strong>Pm</strong> riceve i report dagli
+<strong>Employee</strong> tramite messaggi di tipo
+<code>Employee.Report</code> e li inoltra al <strong>Boss</strong>.</p>
+<p>In caso di comandi globali come la pausa (<code>StopMsg</code>) o la
+ripresa (<code>ResumeMsg</code>), il <strong>Pm</strong> inoltra i
+messaggi a tutti gli <strong>Employee</strong>, garantendo un controllo
+centralizzato.</p>
+<h3 class="unnumbered" id="livello-3-employee">Livello 3: Employee</h3>
+<p>Gli attori <strong>Employee</strong> rappresentano i lavoratori del
+sistema. Ognuno riceve un insieme di compiti dal <strong>Pm</strong> e
+li elabora uno alla volta. Le principali caratteristiche di un
+<strong>Employee</strong> includono:</p>
+<ul>
+<li><p><strong>Gestione Asincrona dei Task:</strong> I task vengono
+elaborati utilizzando una funzione di utilità
+(<code>Utils.linesWithBufferInputStream</code>) e i risultati vengono
+inviati tramite un report al mittente (di norma il
+<strong>Pm</strong>).</p></li>
+<li><p><strong>Pausa e Ripresa:</strong> Gli <strong>Employee</strong>
+possono fermare l’elaborazione dei task tramite il messaggio
+<code>StopMsg</code> e riprenderla tramite <code>ResumeMsg</code>.
+Questa capacità migliora la resilienza del sistema e consente una
+gestione flessibile dei lavoratori.</p></li>
+<li><p><strong>Chiusura Ciclica dei Task:</strong> Utilizzano un
+iteratore (<code>taskIterator</code>) per avanzare nel ciclo di compiti
+assegnati e inviano notifiche al completamento.</p></li>
+</ul>
+<h3 class="unnumbered" id="interazione-tra-gli-attori">Interazione tra
+gli Attori</h3>
+<p>L’interazione tra gli attori è basata su un flusso di messaggi ben
+definito:</p>
+<ol>
+<li><p><strong>Boss → Pm:</strong> Invio dei compiti tramite
+<code>Pm.Order</code>.</p></li>
+<li><p><strong>Pm → Employee:</strong> Assegnazione dei task tramite
+<code>Ordered</code>.</p></li>
+<li><p><strong>Employee → Pm:</strong> Invio dei risultati dei task
+tramite <code>Employee.Report</code>.</p></li>
+<li><p><strong>Pm → Boss:</strong> Trasmissione dei report degli
+<strong>Employee</strong>.</p></li>
+</ol>
+<p>Questa struttura modulare rende il sistema scalabile e facile da
+mantenere, poiché ogni livello si occupa esclusivamente di un insieme
+ben definito di responsabilità.</p>
+<h3 class="unnumbered" id="vantaggi-del-design">Vantaggi del Design</h3>
+<ol>
+<li><p><strong>Modularità:</strong> Ogni attore ha ruoli chiari,
+facilitando estensioni o modifiche.</p></li>
+<li><p><strong>Parallelismo:</strong> L’uso degli attori consente
+un’elaborazione parallela dei task.</p></li>
+<li><p><strong>Resilienza:</strong> La gestione di eventi come pause e
+riprese garantisce continuità operativa.</p></li>
+<li><p><strong>Scalabilità:</strong> È possibile aggiungere più attori
+<strong>Pm</strong> o <strong>Employee</strong> per gestire un numero
+maggiore di compiti senza modificare l’architettura principale.</p></li>
+</ol>
+<p><img src="report/img/chaGpt-graph.png" style="width:3cm"
+alt="image" /><br />
+</p>
 <h1 id="ch:into">Part 2</h1>
+<p>La seconda parte dell’assignement consisteva nell’implementazione di
+una versoine di Pixel art, un software per la colorazione collaborativa
+di una matrice, tramite un gestore di scambi di messaggi. Le modifiche
+sulla propria matrice e ricezione di quelle degli altri utenti devono
+essere visibili sulla propria "versione locale" senza dover condividere
+nessuna porzione di memoria.</p>
+<p>Durante la creazione di ogni client viene attributo un clientID
+randomico. Ogni messaggio viene inviato sullo stesso
+<strong>Exchange</strong> che in questo contesto è di tipo Topic, per
+poter inviare messaggi di determinati contesti in code separate. I
+contesti di interesse per questo esercizio, e i loro utilizzi sono i
+seguenti:</p>
+<ul>
+<li><p><strong>Mouse</strong>: scambio della posizione dei puntatori di
+tutti i client collegati alla rete per poterli visualizzare
+contemporaneamente.</p></li>
+<li><p><strong>Brush</strong>: notifica di cambio colore real-time del
+brush dei client.</p></li>
+<li><p><strong>Color</strong>: evento di colorazione di un pixel dei
+client.</p></li>
+<li><p><strong>History</strong>: ???? storia di eventi di colorazione
+pixel per i nuovi client che si collegano in un momento
+successivo.</p></li>
+<li><p><strong>Exit</strong>: ???? notifica di uscita di un client e
+rimozione del brush.</p></li>
+</ul>
+<p>La pubblicazione di messaggi in queste code è, giustamente, collegata
+agli eventi che vogliono catturare. Prendendo ad esempio il cambio di
+colore di un brush. La classe di gestione dei pennelli è stata estesa
+aggiungendo a ciascun brush l’identificatore del proprio client. Ogni
+messaggio pubblicato sulla coda dei pennelli viene intercettato e
+passato a questa classe, che contiene una lista dei brush e identifica
+quello che ha cambiato colore, aggiornandolo nel client locale che ha
+ricevuto il messaggio. Nello stesso modo l’evento di modifica di colore
+notifica questo evento pubblicando un messaggio che contiene le
+informazioni necessarie agli altri client per modificare la grafica.
+visto la semplicità del contesto i messaggi contengono tutte le
+informazioni, come identificatore e colore, in una stringa separate da
+un carattere speciale, in questo caso il ’_’.</p>
+<p>Un ragionamento analogo è stato fatto per ogni altro evento catturato
+utile al funzionamento corretto dell’applicazione, come il movimento del
+puntatore degli altri client o il cambio di colore del pennello.</p>
 <h1 id="ch:into">Part 3</h1>
 </body>
 </html>
