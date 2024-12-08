@@ -17,10 +17,11 @@ Durante la creazione di ogni client viene attributo un clientID randomico. Ogni 
 \end{itemize}
 
 La pubblicazione di messaggi in queste code è, giustamente, collegata agli eventi che vogliono catturare.
-Prendendo ad esempio il cambio di colore di un brush. La classe di gestione dei brush è stata estesa aggiungendo a ciascun brush l'identificatore del proprio client.
-Ogni messaggio sulla coda dei brushes, viene intercettato e poi passato a questa classe che contiene la lista di brush e riesce ad identificare il brush che ha cambiato colore
-e lo mostra sul client locale che ha ricevuto il messaggio. Nello stesso modo l'evento di modifica di colore notifica questo evento pubblicando un messaggio che contiene le informazioni
+Prendendo ad esempio il cambio di colore di un brush. La classe di gestione dei pennelli è stata estesa aggiungendo a ciascun brush l'identificatore del proprio client.
+Ogni messaggio pubblicato sulla coda dei pennelli viene intercettato e passato a questa classe, che contiene una lista dei brush e identifica quello che ha cambiato colore, aggiornandolo nel client locale che ha ricevuto il messaggio. 
+Nello stesso modo l'evento di modifica di colore notifica questo evento pubblicando un messaggio che contiene le informazioni
 necessarie agli altri client per modificare la grafica. visto la semplicità del contesto i messaggi contengono tutte le informazioni, come identificatore e colore, in una stringa 
-separate da un carattere speciale, in questo caso il '_'. 
+separate da un carattere speciale, in questo caso il '\_'.
 
-Un ragionamento analogo è stato fatto per ogni altro evento catturato utile al funzionamento corretto dell'applicazione. 
+Un ragionamento analogo è stato fatto per ogni altro evento catturato utile al funzionamento corretto dell'applicazione, come il movimento del puntatore 
+degli altri client o il cambio di colore del pennello.
