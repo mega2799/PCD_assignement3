@@ -48,7 +48,11 @@ id="toc-interazione-tra-gli-attori">Interazione tra gli Attori</a></li>
 del Design</a></li>
 </ul></li>
 </ul></li>
-<li><a href="#ch:into" id="toc-ch:into">Part 2</a></li>
+<li><a href="#ch:into" id="toc-ch:into">Part 2</a>
+<ul>
+<li><a href="#struttura-e-gestione-code"
+id="toc-struttura-e-gestione-code">Struttura e gestione code</a></li>
+</ul></li>
 <li><a href="#ch:into" id="toc-ch:into">Part 3</a></li>
 </ul>
 </nav>
@@ -173,6 +177,7 @@ di una matrice, tramite un gestore di scambi di messaggi. Le modifiche
 sulla propria matrice e ricezione di quelle degli altri utenti devono
 essere visibili sulla propria "versione locale" senza dover condividere
 nessuna porzione di memoria.</p>
+<h2 id="struttura-e-gestione-code">Struttura e gestione code</h2>
 <p>Durante la creazione di ogni client viene attributo un clientID
 randomico. Ogni messaggio viene inviato sullo stesso
 <strong>Exchange</strong> che in questo contesto è di tipo Topic, per
