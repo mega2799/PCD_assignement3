@@ -2,3 +2,25 @@
 \label{ch:into} % This how you label a chapter and the key (e.g., ch:into) will be used to refer this chapter ``Introduction'' later in the report. 
 % the key ``ch:into'' can be used with command \ref{ch:intor} to refere this Chapter.
 
+La seconda parte dell'assignement consisteva nell'implementazione di una versoine di Pixel art, un software per la colorazione 
+collaborativa di una matrice, tramite un gestore di scambi di messaggi. Le modifiche sulla propria matrice e ricezione di quelle degli altri utenti 
+devono essere visibili sulla propria "versione locale" senza dover condividere nessuna porzione di memoria.
+
+Durante la creazione di ogni client viene attributo un clientID randomico. Ogni messaggio viene inviato sullo stesso \textbf{Exchange} che in questo contesto
+è di tipo Topic, per poter inviare messaggi di determinati contesti in code separate. I contesti di interesse per questo esercizio, e i loro utilizzi sono i seguenti: 
+\begin{itemize}
+    \item \textbf{Mouse}: scambio della posizione dei puntatori di tutti i client collegati alla rete per poterli visualizzare contemporaneamente.
+    \item \textbf{Brush}: notifica di cambio colore real-time del brush dei client.
+    \item \textbf{Color}: evento di colorazione di un pixel dei client.
+    \item \textbf{History}: ???? storia di eventi di colorazione pixel per i nuovi client che si collegano in un momento successivo. %%TODO check this
+    \item \textbf{Exit}: ???? notifica di uscita di un client e rimozione del brush.%%TODO check this
+\end{itemize}
+
+La pubblicazione di messaggi in queste code è, giustamente, collegata agli eventi che vogliono catturare.
+Prendendo ad esempio il cambio di colore di un brush. La classe di gestione dei brush è stata estesa aggiungendo a ciascun brush l'identificatore del proprio client.
+Ogni messaggio sulla coda dei brushes, viene intercettato e poi passato a questa classe che contiene la lista di brush e riesce ad identificare il brush che ha cambiato colore
+e lo mostra sul client locale che ha ricevuto il messaggio. Nello stesso modo l'evento di modifica di colore notifica questo evento pubblicando un messaggio che contiene le informazioni
+necessarie agli altri client per modificare la grafica. visto la semplicità del contesto i messaggi contengono tutte le informazioni, come identificatore e colore, in una stringa 
+separate da un carattere speciale, in questo caso il '_'. 
+
+Un ragionamento analogo è stato fatto per ogni altro evento catturato utile al funzionamento corretto dell'applicazione. 
