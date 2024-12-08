@@ -6,6 +6,8 @@ La seconda parte dell'assignement consisteva nell'implementazione di una versoin
 collaborativa di una matrice, tramite un gestore di scambi di messaggi. Le modifiche sulla propria matrice e ricezione di quelle degli altri utenti 
 devono essere visibili sulla propria "versione locale" senza dover condividere nessuna porzione di memoria.
 
+\section{Struttura e gestione code}
+
 Durante la creazione di ogni client viene attributo un clientID randomico. Ogni messaggio viene inviato sullo stesso \textbf{Exchange} che in questo contesto
 è di tipo Topic, per poter inviare messaggi di determinati contesti in code separate. I contesti di interesse per questo esercizio, e i loro utilizzi sono i seguenti: 
 \begin{itemize}
