@@ -18,6 +18,73 @@
       vertical-align: middle;
     }
     .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        background-color: #ffffff;
+        color: #a0a0a0;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-left: 4px; }
+    div.sourceCode
+      { color: #1f1c1b; background-color: #ffffff; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #1f1c1b; } /* Normal */
+    code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
+    code span.an { color: #ca60ca; } /* Annotation */
+    code span.at { color: #0057ae; } /* Attribute */
+    code span.bn { color: #b08000; } /* BaseN */
+    code span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+    code span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #924c9d; } /* Char */
+    code span.cn { color: #aa5500; } /* Constant */
+    code span.co { color: #898887; } /* Comment */
+    code span.cv { color: #0095ff; } /* CommentVar */
+    code span.do { color: #607880; } /* Documentation */
+    code span.dt { color: #0057ae; } /* DataType */
+    code span.dv { color: #b08000; } /* DecVal */
+    code span.er { color: #bf0303; text-decoration: underline; } /* Error */
+    code span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+    code span.fl { color: #b08000; } /* Float */
+    code span.fu { color: #644a9b; } /* Function */
+    code span.im { color: #ff5500; } /* Import */
+    code span.in { color: #b08000; } /* Information */
+    code span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+    code span.op { color: #1f1c1b; } /* Operator */
+    code span.ot { color: #006e28; } /* Other */
+    code span.pp { color: #006e28; } /* Preprocessor */
+    code span.re { color: #0057ae; background-color: #e0e9f8; } /* RegionMarker */
+    code span.sc { color: #3daee9; } /* SpecialChar */
+    code span.ss { color: #ff5500; } /* SpecialString */
+    code span.st { color: #bf0303; } /* String */
+    code span.va { color: #0057ae; } /* Variable */
+    code span.vs { color: #bf0303; } /* VerbatimString */
+    code span.wa { color: #bf0303; } /* Warning */
   </style>
   <link rel="stylesheet" href="latex2html.css" />
   <!--[if lt IE 9]>
@@ -27,8 +94,6 @@
 <body>
 <nav id="TOC" role="doc-toc">
 <ul>
-<li><a href="#list-of-abbreviations" id="toc-list-of-abbreviations">List
-of Abbreviations</a></li>
 <li><a href="#ch:into" id="toc-ch:into">Parte 1</a>
 <ul>
 <li><a href="#struttura-del-sistema-ad-attori-e-descrizione-operativa"
@@ -44,8 +109,6 @@ Manager)</a></li>
 Employee</a></li>
 <li><a href="#interazione-tra-gli-attori"
 id="toc-interazione-tra-gli-attori">Interazione tra gli Attori</a></li>
-<li><a href="#vantaggi-del-design" id="toc-vantaggi-del-design">Vantaggi
-del Design</a></li>
 </ul></li>
 </ul></li>
 <li><a href="#ch:into" id="toc-ch:into">Part 2</a>
@@ -53,7 +116,16 @@ del Design</a></li>
 <li><a href="#struttura-e-gestione-code"
 id="toc-struttura-e-gestione-code">Struttura e gestione code</a></li>
 </ul></li>
-<li><a href="#ch:into" id="toc-ch:into">Part 3</a></li>
+<li><a href="#ch:into" id="toc-ch:into">Part 3</a>
+<ul>
+<li><a href="#introduzione-e-struttura"
+id="toc-introduzione-e-struttura">Introduzione e struttura</a>
+<ul>
+<li><a href="#server" id="toc-server">Server</a></li>
+<li><a href="#modifiche-client" id="toc-modifiche-client">Modifiche
+Client</a></li>
+</ul></li>
+</ul></li>
 </ul>
 </nav>
 <div class="titlepage">
@@ -67,23 +139,19 @@ DISI</span><br />
 <span> Matteo Santoro </span><br />
 <span> <em>Supervisor:</em> Alessandro Ricci </span><br />
 </p>
-<p>2024-12-08</p>
+<p>2024-12-09</p>
 </div>
-</div>
-<h2 id="list-of-abbreviations">List of Abbreviations</h2>
-<div class="abbrv">
-<p>School of Mathematical, Physical and Computational Sciences</p>
 </div>
 <h1 id="ch:into">Parte 1</h1>
 <p>La soluzione ad attori del problema degli Assignement precedenti è
 stata implementata in java, utilizzando la libreria Akka.</p>
-<h2 class="unnumbered"
+<h2
 id="struttura-del-sistema-ad-attori-e-descrizione-operativa">Struttura
 del Sistema ad Attori e Descrizione Operativa</h2>
 <p>La gerarchia è composta da tre principali livelli di attori:
 <strong>Boss</strong>, <strong>Pm</strong> e <strong>Employee</strong>,
 ciascuno con ruoli e responsabilità ben definiti.</p>
-<h3 class="unnumbered" id="livello-1-boss">Livello 1: Boss</h3>
+<h3 id="livello-1-boss">Livello 1: Boss</h3>
 <p>L’attore <strong>Boss</strong> è la radice della gerarchia ed è
 responsabile dell’intero processo di gestione dei task. Riceve il
 percorso di una directory (<code>directoryPath</code>) e popola una
@@ -101,8 +169,8 @@ subordinato <strong>Pm</strong>, specificando:</p>
 report inviati dagli <strong>Employee</strong>, aggiornando i dati
 attraverso un’interfaccia che organizza i risultati dei task. Questo lo
 rende il punto centrale della raccolta dei risultati.</p>
-<h3 class="unnumbered" id="livello-2-pm-project-manager">Livello 2: Pm
-(Project Manager)</h3>
+<h3 id="livello-2-pm-project-manager">Livello 2: Pm (Project
+Manager)</h3>
 <p>Il <strong>Pm</strong> agisce come intermediario tra il
 <strong>Boss</strong> e i lavoratori effettivi
 (<strong>Employee</strong>). Al momento della creazione, genera una
@@ -118,7 +186,7 @@ equamente i task.</p>
 ripresa (<code>ResumeMsg</code>), il <strong>Pm</strong> inoltra i
 messaggi a tutti gli <strong>Employee</strong>, garantendo un controllo
 centralizzato.</p>
-<h3 class="unnumbered" id="livello-3-employee">Livello 3: Employee</h3>
+<h3 id="livello-3-employee">Livello 3: Employee</h3>
 <p>Gli attori <strong>Employee</strong> rappresentano i lavoratori del
 sistema. Ognuno riceve un insieme di compiti dal <strong>Pm</strong> e
 li elabora uno alla volta. Le principali caratteristiche di un
@@ -138,8 +206,7 @@ gestione flessibile dei lavoratori.</p></li>
 iteratore (<code>taskIterator</code>) per avanzare nel ciclo di compiti
 assegnati e inviano notifiche al completamento.</p></li>
 </ul>
-<h3 class="unnumbered" id="interazione-tra-gli-attori">Interazione tra
-gli Attori</h3>
+<h3 id="interazione-tra-gli-attori">Interazione tra gli Attori</h3>
 <p>L’interazione tra gli attori è basata su un flusso di messaggi ben
 definito:</p>
 <ol>
@@ -155,19 +222,7 @@ tramite <code>Employee.Report</code>.</p></li>
 <p>Questa struttura modulare rende il sistema scalabile e facile da
 mantenere, poiché ogni livello si occupa esclusivamente di un insieme
 ben definito di responsabilità.</p>
-<h3 class="unnumbered" id="vantaggi-del-design">Vantaggi del Design</h3>
-<ol>
-<li><p><strong>Modularità:</strong> Ogni attore ha ruoli chiari,
-facilitando estensioni o modifiche.</p></li>
-<li><p><strong>Parallelismo:</strong> L’uso degli attori consente
-un’elaborazione parallela dei task.</p></li>
-<li><p><strong>Resilienza:</strong> La gestione di eventi come pause e
-riprese garantisce continuità operativa.</p></li>
-<li><p><strong>Scalabilità:</strong> È possibile aggiungere più attori
-<strong>Pm</strong> o <strong>Employee</strong> per gestire un numero
-maggiore di compiti senza modificare l’architettura principale.</p></li>
-</ol>
-<p><img src="report/img/chaGpt-graph.png" style="width:3cm"
+<p><img src="report/img/chaGpt-graph.png" style="width:15cm"
 alt="image" /><br />
 </p>
 <h1 id="ch:into">Part 2</h1>
@@ -215,5 +270,60 @@ un carattere speciale, in questo caso il ’_’.</p>
 utile al funzionamento corretto dell’applicazione, come il movimento del
 puntatore degli altri client o il cambio di colore del pennello.</p>
 <h1 id="ch:into">Part 3</h1>
+<h2 id="introduzione-e-struttura">Introduzione e struttura</h2>
+<p>La terza ed ultima parte dell’assignement 3 consiste nell’utilizzo di
+Java RMI per la comunicazione tra diversi client in versione
+distribuita. Differentemente dalla parte 2 viene utilizzata
+l’invocazione di metodi di client remoti tramite la libreria
+<strong>java.rmi</strong>. Consente di astrarre la comunicazione remota,
+fornendo un’interfaccia simile a quella delle invocazioni locali, ma con
+il supporto per oggetti distribuiti.</p>
+<h3 id="server">Server</h3>
+<p>Il server crea un registro RMI e registra i servizi remoti. Di
+seguito il codice:</p>
+<ul>
+<li><p><strong>createRegistry()</strong>: crea un registro RMI per
+registrare i servizi remoti.</p></li>
+<li><p><strong>exportObject()</strong>: esporta gli oggetti remoti per
+consentire le chiamate distribuite.</p></li>
+<li><p><strong>rebind()</strong>: associa i nomi dei servizi agli stub
+remoti.</p></li>
+</ul>
+<h3 id="modifiche-client">Modifiche Client</h3>
+<h4 id="gridservice">GridService</h4>
+<p>Gestisce una griglia condivisa, permettendo ai client di:</p>
+<ul>
+<li><p>Registrarsi per ricevere aggiornamenti.</p></li>
+<li><p>Impostare il colore di un pixel specifico.</p></li>
+<li><p>Sincronizzare la griglia tra tutti i client.</p></li>
+</ul>
+<p>Le operazioni register, setPixel e sendGrid vengono invocate in modo
+remoto dai client.</p>
+<h4 id="brushservice">BrushService</h4>
+<p>coordina i pennelli degli utenti, aggiornando la posizione e
+sincronizzando i dati tra i client. I metodi che possono essere invocati
+in questa classe si limitano alla gestione dei pennelli con chiamate
+remote, catturando gli eventi di aggiunta, rimozione e movimento di
+pennelli.</p>
+<h4 id="pixelart">PixelArt</h4>
+<p>La classe estende UnicastRemoteObject, rendendola esportabile come
+oggetto remoto, e implementa le interfacce PixelArt e Serializable. Ciò
+consente:</p>
+<ul>
+<li><p>L’utilizzo come oggetto remoto (richiesto per Java RMI).</p></li>
+<li><p>La serializzazione per inviare l’oggetto attraverso la
+rete.</p></li>
+</ul>
+<p>Il metodo configuration configura l’oggetto remoto e l’interfaccia
+grafica, e stabilisce le connessioni con i servizi remoti. Connessione
+ai Servizi RMI:</p>
+<div class="sourceCode" id="list:java_code_pxArt" data-language="Java"
+data-caption="getRegistry ottiene il registro RMI. lookup recupera i riferimenti agli oggetti remoti registrati."
+label="list:java_code_pxArt"><pre class="sourceCode java"><code class="sourceCode java"><span id="list:java_code_pxArt-1"><a href="#list:java_code_pxArt-1" aria-hidden="true" tabindex="-1"></a>   </span>
+<span id="list:java_code_pxArt-2"><a href="#list:java_code_pxArt-2" aria-hidden="true" tabindex="-1"></a><span class="bu">Registry</span> registry <span class="op">=</span> <span class="bu">LocateRegistry</span><span class="op">.</span><span class="fu">getRegistry</span><span class="op">(</span><span class="kw">null</span><span class="op">);</span></span>
+<span id="list:java_code_pxArt-3"><a href="#list:java_code_pxArt-3" aria-hidden="true" tabindex="-1"></a><span class="kw">this</span><span class="op">.</span><span class="fu">gridService</span> <span class="op">=</span> <span class="op">(</span>GridService<span class="op">)</span> registry<span class="op">.</span><span class="fu">lookup</span><span class="op">(</span><span class="st">&quot;grid&quot;</span><span class="op">);</span></span>
+<span id="list:java_code_pxArt-4"><a href="#list:java_code_pxArt-4" aria-hidden="true" tabindex="-1"></a><span class="kw">this</span><span class="op">.</span><span class="fu">brushService</span> <span class="op">=</span> <span class="op">(</span>BrushService<span class="op">)</span> registry<span class="op">.</span><span class="fu">lookup</span><span class="op">(</span><span class="st">&quot;brush&quot;</span><span class="op">);</span></span></code></pre></div>
+<p>getRegistry(): Ottiene il registro RMI. lookup(): Recupera i
+riferimenti agli oggetti remoti registrati.</p>
 </body>
 </html>
