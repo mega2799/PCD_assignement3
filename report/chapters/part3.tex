@@ -2,3 +2,61 @@
 \label{ch:into} % This how you label a chapter and the key (e.g., ch:into) will be used to refer this chapter ``Introduction'' later in the report. 
 % the key ``ch:into'' can be used with command \ref{ch:intor} to refere this Chapter.
 
+\section{Introduzione e struttura}
+
+La terza ed ultima parte dell'assignement 3 consiste nell'utilizzo di Java RMI per la comunicazione tra diversi client in versione distribuita.
+Differentemente dalla parte 2 viene utilizzata l'invocazione di metodi di client remoti tramite la libreria \textbf{java.rmi}. Consente di astrarre la comunicazione remota, fornendo un'interfaccia simile a quella delle invocazioni locali, ma con il supporto per oggetti distribuiti.
+
+
+\subsection{Server}
+
+Il server crea un registro RMI  e registra i servizi remoti. Di seguito il codice:
+
+\begin{itemize}
+    \item \textbf{createRegistry()}: crea un registro RMI per registrare i servizi remoti.
+    \item \textbf{exportObject()}: esporta gli oggetti remoti per consentire le chiamate distribuite.
+    \item \textbf{rebind()}: associa i nomi dei servizi agli stub remoti.
+\end{itemize}
+
+
+\subsection{Modifiche Client}
+
+\subsubsection{GridService}
+Gestisce una griglia condivisa, permettendo ai client di:
+
+\begin{itemize}
+    \item Registrarsi per ricevere aggiornamenti.
+    \item Impostare il colore di un pixel specifico.
+    \item Sincronizzare la griglia tra tutti i client.
+\end{itemize}
+
+Le operazioni register, setPixel e sendGrid vengono invocate in modo remoto dai client.
+
+\subsubsection{BrushService}
+
+coordina i pennelli degli utenti, aggiornando la posizione e sincronizzando i dati tra i client. I metodi che possono essere invocati in questa classe si limitano alla gestione dei pennelli con chiamate remote, catturando gli eventi di
+aggiunta, rimozione e movimento di pennelli.
+
+\subsubsection{PixelArt}
+
+La classe estende UnicastRemoteObject, rendendola esportabile come oggetto remoto, e implementa le interfacce PixelArt e Serializable. Ciò consente:
+
+\begin{itemize}
+    \item L'utilizzo come oggetto remoto (richiesto per Java RMI).
+    \item La serializzazione per inviare l'oggetto attraverso la rete.
+\end{itemize}
+
+Il metodo  configuration configura l'oggetto remoto e l'interfaccia grafica, e stabilisce le connessioni con i servizi remoti.
+Connessione ai Servizi RMI:
+
+\begin{lstlisting}[language=Java, caption={
+    getRegistry ottiene il registro RMI. lookup recupera i riferimenti agli oggetti remoti registrati.
+}, label=list:java_code_pxArt]
+   
+Registry registry = LocateRegistry.getRegistry(null);
+this.gridService = (GridService) registry.lookup("grid");
+this.brushService = (BrushService) registry.lookup("brush");
+\end{lstlisting}
+
+getRegistry(): Ottiene il registro RMI.
+lookup(): Recupera i riferimenti agli oggetti remoti registrati.
