@@ -139,7 +139,7 @@ DISI</span><br />
 <span> Matteo Santoro </span><br />
 <span> <em>Supervisor:</em> Alessandro Ricci </span><br />
 </p>
-<p>2024-12-09</p>
+<p>2024-12-17</p>
 </div>
 </div>
 <h1 id="ch:into">Parte 1</h1>
@@ -222,9 +222,13 @@ tramite <code>Employee.Report</code>.</p></li>
 <p>Questa struttura modulare rende il sistema scalabile e facile da
 mantenere, poiché ogni livello si occupa esclusivamente di un insieme
 ben definito di responsabilità.</p>
+<figure>
 <p><img src="report/img/chaGpt-graph.png" style="width:15cm"
 alt="image" /><br />
 </p>
+<figcaption>Architettura del sistema (disegnata con
+chatgpt)</figcaption>
+</figure>
 <h1 id="ch:into">Part 2</h1>
 <p>La seconda parte dell’assignement consisteva nell’implementazione di
 una versoine di Pixel art, un software per la colorazione collaborativa
@@ -247,10 +251,9 @@ contemporaneamente.</p></li>
 brush dei client.</p></li>
 <li><p><strong>Color</strong>: evento di colorazione di un pixel dei
 client.</p></li>
-<li><p><strong>History</strong>: ???? storia di eventi di colorazione
-pixel per i nuovi client che si collegano in un momento
-successivo.</p></li>
-<li><p><strong>Exit</strong>: ???? notifica di uscita di un client e
+<li><p><strong>History</strong>: storia di eventi di colorazione pixel
+per i nuovi client che si collegano in un momento successivo.</p></li>
+<li><p><strong>Exit</strong>: notifica di uscita di un client e
 rimozione del brush.</p></li>
 </ul>
 <p>La pubblicazione di messaggi in queste code è, giustamente, collegata
